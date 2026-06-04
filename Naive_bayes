@@ -34,3 +34,25 @@ decoded_preds = le.inverse_transform(predictions)
 for review, pred in zip(new_incoming_reviews, decoded_preds):
     print(f"Review: '{review}'")
     print(f"Prediction: {pred}\n")
+
+
+
+import numpy as np
+from sklearn.naive_bayes import GaussianNB
+from sklearn.preprocessing import LabelEncoder
+
+#temperatures (in Celsius)
+X = np.array([[70], [75], [82], [93],[105], [115]])
+y_text = ["Normal", "Normal", "Normal","Normal", "Overheating", "Overheating"]
+
+le = LabelEncoder()
+y = le.fit_transform(y_text)
+
+model = GaussianNB()
+model.fit(X, y)
+
+new_temp = [[95]]
+prediction = model.predict(new_temp)
+
+decoded_result = le.inverse_transform(prediction)[0]
+print(f"Predicted Status for {new_temp[0][0]}°C:", decoded_result)
