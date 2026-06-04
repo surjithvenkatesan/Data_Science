@@ -1,0 +1,36 @@
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.preprocessing import LabelEncoder
+
+#  Customer reviews
+reviews = [
+    "The food was absolutely wonderful and the staff was great.",
+    "Terrible service and cold food. Do not go here!",
+    "Loved the atmosphere, will definitely be coming back.",
+    "Overpriced, tasteless, and a very disappointing experience."
+]
+labels = ["Positive", "Negative", "Positive", "Negative"]
+
+le = LabelEncoder()
+y = le.fit_transform(labels)
+
+vectorizer = CountVectorizer()
+x = vectorizer.fit_transform(reviews)
+
+model = MultinomialNB()
+model.fit(x, y)
+
+new_incoming_reviews = [
+    "I highly recommend this place to everyone!",
+    "The wait time horrible and the soup was salty."
+]
+
+test_vec = vectorizer.transform(new_incoming_reviews)
+
+predictions = model.predict(test_vec)
+
+decoded_preds = le.inverse_transform(predictions)
+
+for review, pred in zip(new_incoming_reviews, decoded_preds):
+    print(f"Review: '{review}'")
+    print(f"Prediction: {pred}\n")
